@@ -7,8 +7,8 @@ function useRecommendations(products) {
   const [recommendations, setRecommendations] = useState([]);
 
   const getRecommendations = (formData) => {
-    return recommendationService.getRecommendations(formData, products);
-  };
+    setRecommendations(recommendationService.getRecommendations(formData, products));
+  }
 
   return { recommendations, getRecommendations, setRecommendations };
 }
