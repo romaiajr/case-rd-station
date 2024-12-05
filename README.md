@@ -95,7 +95,7 @@ Certifique-se de que todos os critérios de aceite são atendidos durante o dese
 
 ## Autor
 
-Desenvolvido por [Seu Nome]
+Desenvolvido por [Roberto Maia]
 
 ## Licença
 
