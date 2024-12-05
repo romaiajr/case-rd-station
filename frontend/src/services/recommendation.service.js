@@ -36,7 +36,7 @@ const getRecommendations = (
     }
     return false;
   })
-  if(!recommendations) {
+  if(!recommendations.length) {
     return recommendations;
   } else if(formData.selectedRecommendationType) {
     return sortArrayByScores(productScores, recommendations)
