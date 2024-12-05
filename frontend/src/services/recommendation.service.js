@@ -21,30 +21,67 @@ function sortArrayByScores(scores, arr) {
   return indices.map(index => arr[index]);
 }
 
-const getRecommendations = (
-  formData = { selectedPreferences: [], selectedFeatures: [], selectedRecommendationType: Boolean},
-  products
-) => {
-  const selectedOptions = [...formData.selectedFeatures || [], ...formData.selectedPreferences || []]
-  const productScores = []
+
+/**
+* Método para montar um array único com as opções selecionadas
+*/
+const getSelectedOptions = (formData) => [
+  ...(formData.selectedFeatures || []),
+  ...(formData.selectedPreferences || [])
+];
+
+/**
+* Método para montar um array único com as opções do produto
+*/
+const getProductOptions = (product) => [
+  ...(product.features || []),
+  ...(product.preferences || [])
+];
+
+/**
+* Método para listar recomendações e suas pontuações
+*/
+const calculateProductScores = (products, selectedOptions) => {
+  const productScores = [];
   const recommendations = products.filter((product) => {
-    const productOptions = [...product.features || [], ...product.preferences || []]
-    const match = containsAny(productOptions, selectedOptions)
-    if(match) {
-      productScores.push(match)
-      return true
+    const productOptions = getProductOptions(product);
+    const match = containsAny(productOptions, selectedOptions);
+    if (match) {
+      productScores.push(match);
+      return true;
     }
     return false;
-  })
-  if(!recommendations.length) {
+  });
+  return { recommendations, productScores };
+};
+
+/**
+* Método para pegar a recomendação de maior nota e em caso de empate o último produto
+*/
+const getTopRecommendation = (productScores, recommendations) => {
+  const biggestScore = Math.max(...productScores);
+  const recommendationIndex = productScores.lastIndexOf(biggestScore);
+  return [recommendations[recommendationIndex]];
+};
+
+const getRecommendations = (
+  formData = { selectedPreferences: [], selectedFeatures: [], selectedRecommendationType: Boolean },
+  products
+) => {
+  const selectedOptions = getSelectedOptions(formData);
+
+  const { recommendations, productScores } = calculateProductScores(products, selectedOptions);
+
+  if (!recommendations.length) {
     return recommendations;
-  } else if(formData.selectedRecommendationType) {
-    return sortArrayByScores(productScores, recommendations)
+  }
+
+  if (formData.selectedRecommendationType) {
+    return sortArrayByScores(productScores, recommendations);
   } else {
-    const biggestScore = Math.max(...productScores);
-    const recommendationIndex = productScores.lastIndexOf(biggestScore)
-    return [recommendations[recommendationIndex]]
+    return getTopRecommendation(productScores, recommendations);
   }
 };
+
 
 export default { getRecommendations };
