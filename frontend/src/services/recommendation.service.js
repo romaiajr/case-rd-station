@@ -25,10 +25,10 @@ const getRecommendations = (
   formData = { selectedPreferences: [], selectedFeatures: [], selectedRecommendationType: Boolean},
   products
 ) => {
-  const selectedOptions = [...formData.selectedFeatures, ...formData.selectedPreferences]
+  const selectedOptions = [...formData.selectedFeatures || [], ...formData.selectedPreferences || []]
   const productScores = []
   const recommendations = products.filter((product) => {
-    const productOptions = [...product.features, ...product.preferences]
+    const productOptions = [...product.features || [], ...product.preferences || []]
     const match = containsAny(productOptions, selectedOptions)
     if(match) {
       productScores.push(match)
