@@ -8,7 +8,7 @@ import useForm from '../../hooks/useForm';
 import useRecommendations from '../../hooks/useRecommendations';
 import { RecommendationTypeEnum } from "./Fields/RecommendationType";
 
-function Form() {
+function Form({onSubmitCallback}) {
   const { preferences, features, products } = useProducts();
   const { formData, handleChange } = useForm({
     selectedPreferences: [],
@@ -20,7 +20,8 @@ function Form() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    getRecommendations(formData);
+    const data = getRecommendations(formData);
+    onSubmitCallback(data)
   };
 
   return (
